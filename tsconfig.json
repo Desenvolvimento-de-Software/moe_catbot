@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+        /* Language and Environment */
+        "target": "es6",
+
+        /* Modules */
+        "module": "ESNEXT",
+        "rootDir": "./src",
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "outDir": "./dist",
+
+        /* Interop Constraints */
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+
+        /* Type Checking */
+        "strict": true,
+        "noImplicitAny": true,
+
+        /* Completeness */
+        "skipLibCheck": true
+    }
+}
