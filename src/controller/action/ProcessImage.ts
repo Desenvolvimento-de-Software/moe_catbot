@@ -199,7 +199,8 @@ export default class ProcessImage extends Action {
             message += `☁️ Service: Catbox\n`;
             message += `🗂️ Size: ${filesize}\n`;
             message += `⏲️ Expires within: ∞\n`;
-            message += `📎 Link: ${response}\n\n`;
+            message += `📎 Link: <code>${response}</code>\n\n`;
+            message += `Tap or click on the link 👆 to copy it to your clipboard.\n\n`;
             message += `🤖 By @moe_catbot`;
 
             editMessageText
