@@ -201,7 +201,7 @@ export default class ProcessImage extends Action {
             message += `⏲️ Expires within: ∞\n`;
             message += `📎 Link: <code>${response}</code>\n\n`;
             message += `Tap or click on the link 👆 to copy it to your clipboard.\n\n`;
-            message += `🤖 By @moe_catbot`;
+            message += `⚡ Stay tuned at <a href="https://t.me/softwarebr">Desenvolvimento de Software</a>`;
 
             editMessageText
                 .setChatId(payload.message.chat.id)
