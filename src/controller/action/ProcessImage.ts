@@ -135,9 +135,12 @@ export default class ProcessImage extends Action {
         const sendMessage = new SendMessage();
         sendMessage
             .setChatId(payload.message.chat.id)
-            .setReplyToMessageId(payload.message.message_id)
             .setText("⬇️ Downloading your image...")
             .setParseMode("HTML");
+
+        if (Number(payload.message.chat.id) > 0) {
+            sendMessage.setReplyToMessageId(payload.message.message_id);
+        }
 
         const messageRequest = await sendMessage.post();
         const messageResponse = await messageRequest.json();
@@ -157,6 +160,11 @@ export default class ProcessImage extends Action {
 
         writeStream.write(buffer);
         writeStream.end(() => {
+
+            if (Number(payload.message.chat.id) < 0) {
+                this.deleteMessage(payload.message.message_id, payload.message.chat.id);
+            }
+
             this.sendToCatbox(payload, destination);
         });
     }
@@ -195,20 +203,32 @@ export default class ProcessImage extends Action {
             const filesize = this.getParsedSize(file.size);
 
             let message = "";
-            message += `✅ <b>Uploaded Successfully!</b>\n\n`;
-            message += `☁️ Service: Catbox\n`;
-            message += `🗂️ Size: ${filesize}\n`;
-            message += `⏲️ Expires within: ∞\n`;
-            message += `📎 Link: <code>${response}</code>\n\n`;
-            message += `Tap or click on the link 👆 to copy it to your clipboard.\n\n`;
-            message += `⚡ Stay tuned at <a href="https://t.me/softwarebr">Desenvolvimento de Software</a>`;
+
+            if (Number(payload.message.chat.id) > 0) {
+                message += `✅ <b>Uploaded Successfully!</b>\n\n`;
+                message += `☁️ Service: Catbox\n`;
+                message += `🗂️ Size: ${filesize}\n`;
+                message += `⏲️ Expires within: ∞\n`;
+                message += `📎 Link: <code>${response}</code>\n\n`;
+                message += `Tap or click on the link 👆 to copy it to your clipboard.\n\n`;
+                message += `⚡ Stay tuned at <a href="https://t.me/softwarebr">Desenvolvimento de Software</a>`;
+
+            } else {
+
+                message += `${response}\n\n`;
+                if (payload.message.caption) {
+                    message += `${payload.message.caption}\n\n`;
+                }
+
+                message += `🤖 By @moe_catbot`;
+            }
 
             editMessageText
                 .setChatId(payload.message.chat.id)
                 .setMessageId(this.messageId || 0)
                 .setText(message)
                 .setParseMode("HTML")
-                .setDisableWebPagePreview(true)
+                .setDisableWebPagePreview(Number(payload.message.chat.id) > 0)
                 .post();
         }
 
