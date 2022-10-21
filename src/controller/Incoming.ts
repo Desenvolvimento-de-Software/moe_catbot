@@ -198,7 +198,8 @@ export default class IncomingController extends DefaultController {
     private initializeActions(): void {
         this.actions = {
             document : ProcessImage,
-            photo : ProcessImage
+            photo : ProcessImage,
+            video : ProcessImage
         };
     }
 

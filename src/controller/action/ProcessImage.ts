@@ -59,6 +59,10 @@ export default class ProcessImage extends Action {
                 method = this.getFileIdByPhoto;
                 break;
 
+            case payload.message.hasOwnProperty("video"):
+                method = this.getFileIdByVideo;
+                break;
+
             case payload.message.hasOwnProperty("document"):
                 method = this.getFileIdByDocument;
                 break;
@@ -107,6 +111,19 @@ export default class ProcessImage extends Action {
         const photos = payload.message.photo;
         const photo = photos.at(-1);
         return photo.file_id || null;
+    }
+
+    /**
+     * Returns the file ID by the photo attribute.
+     *
+     * @author Marcos Leandro
+     * @since  1.0.0
+     *
+     * @return {string}
+     */
+    private getFileIdByVideo(payload: Record<string, any>): string|null {
+        const video = payload.message.video;
+        return video.file_id || null;
     }
 
     /**
@@ -241,7 +258,7 @@ export default class ProcessImage extends Action {
      * @author Marcos Leandro
      * @since  1.0.0
      *
-     * @param size Rae filesize.
+     * @param size Raw filesize.
      *
      * @return Parsed filesize.
      */
