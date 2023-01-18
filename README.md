@@ -18,5 +18,5 @@ This is a bot that automates sending images to catbox.moe without the user havin
 
 `npm run build`
 
-**Stay Tuned!**
+## Stay tuned!
 [https://t.me/softwarebr](https://t.me/softwarebr)
