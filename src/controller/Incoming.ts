@@ -211,7 +211,7 @@ export default class IncomingController extends DefaultController {
      */
     private initializeCommands(): void {
         this.commands = {
-            start: StartCommand
+            start : StartCommand
         };
     }
 }
