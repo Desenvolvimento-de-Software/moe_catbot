@@ -232,11 +232,16 @@ export default class ProcessImage extends Action {
 
             } else {
 
+                const userId = payload.message.from.id;
+                const username = (payload.message.from.first_name || payload.message.from.username);
+                
                 message += `${response}\n\n`;
+
                 if (payload.message.caption) {
                     message += `${payload.message.caption}\n\n`;
                 }
 
+                message += `👤 From <a href=\"tg://user?id=${userId}\">${username}</a>\n`;
                 message += `🤖 By @moe_catbot`;
             }
 
