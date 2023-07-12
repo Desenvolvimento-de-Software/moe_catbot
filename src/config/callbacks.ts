@@ -9,7 +9,7 @@
  * @license  GPLv3 <http://www.gnu.org/licenses/gpl-3.0.en.html>
  */
 
-import DeleteMessage from "../callback/DeleteMessage";
+import DeleteMessage from "../callback/DeleteMessage.js";
 
 export const callbacks = [
     DeleteMessage
