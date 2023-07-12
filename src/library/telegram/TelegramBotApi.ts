@@ -130,68 +130,6 @@ export default class TelegramBotApi {
     }
 
     /**
-     * Makes the request to the Telegram Bot API.
-     *
-     * @author Marcos Leandro
-     * @since  1.0.0
-     *
-     * @param method
-     * @param payload
-     *
-     * @returns {Promise<any>}
-     */
-    private async request(method: string, payload: object): Promise<any> {
-
-        if (payload) {
-            payload = this.camelCaseToSnakeCase(payload);
-            payload = { method: this.method, ...payload };
-        }
-
-        const url = `${TelegramBotApi.endpoint}/bot${TelegramBotApi.token}/${this.method}`;
-        const body = JSON.stringify(payload) || "";
-
-        const headers = {
-            "Content-Type" : "application/json",
-            "Content-Length" : body.length.toString()
-        };
-
-        const params: Record<string, any> = {
-            method : method,
-            headers : headers
-        };
-
-        if (["PUT", "POST"].includes(method)) {
-            params.body = body;
-        }
-
-        return fetch(url, params)
-            .then((response) => response.json())
-            .then((json) => this.validateJsonResponse(json as Record<string, any>))
-            .then((json) => this.snakeToCamelCase(json))
-            .catch((error: any) => {
-                console.error(error.toString());
-            });
-    }
-
-    /**
-     * Validates the json response.
-     *
-     * @author Marcos Leandro
-     * @since  2023-06-15
-     *
-     * @param {Record<string, any>} response
-     *
-     * @return {Record<string, any>}
-     */
-    private validateJsonResponse(response: Record<string, any>): Record<string, any> {
-        if (!response.result) {
-            throw new Error(JSON.stringify(response));
-        }
-
-        return response;
-    }
-
-    /**
      * Converts the payload from snake_case to camelCase.
      *
      * @author Marcos Leandro
@@ -201,7 +139,7 @@ export default class TelegramBotApi {
      *
      * @returns
      */
-    private camelCaseToSnakeCase = (payload: Record<string, any>): Record<string, any> => {
+    public static camelCaseToSnakeCase = (payload: Record<string, any>): Record<string, any> => {
 
         if (Array.isArray(payload)) {
             return payload.map(this.camelCaseToSnakeCase);
@@ -232,7 +170,7 @@ export default class TelegramBotApi {
      *
      * @returns
      */
-    private snakeToCamelCase = (payload: Record<string, any>): Record<string, any> => {
+    public static snakeToCamelCase = (payload: Record<string, any>): Record<string, any> => {
 
         if (Array.isArray(payload)) {
             return payload.map(this.snakeToCamelCase);
@@ -252,4 +190,66 @@ export default class TelegramBotApi {
 
         return result;
     };
+
+    /**
+     * Makes the request to the Telegram Bot API.
+     *
+     * @author Marcos Leandro
+     * @since  1.0.0
+     *
+     * @param method
+     * @param payload
+     *
+     * @returns {Promise<any>}
+     */
+    private async request(method: string, payload: object): Promise<any> {
+
+        if (payload) {
+            payload = TelegramBotApi.camelCaseToSnakeCase(payload);
+            payload = { method: this.method, ...payload };
+        }
+
+        const url = `${TelegramBotApi.endpoint}/bot${TelegramBotApi.token}/${this.method}`;
+        const body = JSON.stringify(payload) || "";
+
+        const headers = {
+            "Content-Type" : "application/json",
+            "Content-Length" : body.length.toString()
+        };
+
+        const params: Record<string, any> = {
+            method : method,
+            headers : headers
+        };
+
+        if (["PUT", "POST"].includes(method)) {
+            params.body = body;
+        }
+
+        return fetch(url, params)
+            .then((response) => response.json())
+            .then((json) => this.validateJsonResponse(json as Record<string, any>))
+            .then((json) => TelegramBotApi.snakeToCamelCase(json))
+            .catch((error: any) => {
+                console.error(error.toString());
+            });
+    }
+
+    /**
+     * Validates the json response.
+     *
+     * @author Marcos Leandro
+     * @since  2023-06-15
+     *
+     * @param {Record<string, any>} response
+     *
+     * @return {Record<string, any>}
+     */
+    private validateJsonResponse(response: Record<string, any>): Record<string, any> {
+        if (!response.result) {
+            throw new Error(JSON.stringify(response));
+        }
+
+        return response;
+    }
 }

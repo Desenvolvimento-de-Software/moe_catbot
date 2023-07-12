@@ -12,6 +12,7 @@
 import Chat from "./Chat.js";
 import Message from "./Message.js";
 import User from "./User.js";
+import TelegramBotApi from "../TelegramBotApi.js";
 import CallbackQuery from "./CallbackQuery.js";
 import { Message as MessageType } from "../type/Message.js";
 
@@ -132,7 +133,7 @@ export default class Context {
      */
     public constructor(payload: Record<string, any>) {
 
-        this.payload = payload;
+        this.payload = TelegramBotApi.snakeToCamelCase(payload);
         this.type = this.parseType();
 
         if (typeof this.type === "undefined") {
