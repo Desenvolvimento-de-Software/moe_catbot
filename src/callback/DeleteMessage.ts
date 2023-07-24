@@ -34,7 +34,7 @@ export default class DeleteMessage extends Callback {
     public async run(): Promise<void> {
 
         const isAdmin = await this.context.user.isAdmin();
-        const isAuthor = this.context.callbackQuery?.callbackData.data.userId !== this.context.user.getId();
+        const isAuthor = this.context.callbackQuery?.callbackData.data.userId === this.context.user.getId();
 
         if (!isAuthor && !isAdmin) {
             this.answer("You cannot delete this message.");
