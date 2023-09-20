@@ -23,7 +23,6 @@ export default abstract class CatboxApi {
      * @since  1.0.0
      */
     protected static endpoint = "https://catbox.moe";
-    // protected static endpoint = "https://yggdrasill.com.br";
 
     /**
      * Catbox.moe API method.
