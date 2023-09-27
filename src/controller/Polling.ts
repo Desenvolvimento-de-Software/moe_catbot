@@ -71,12 +71,12 @@ export default class Polling extends Controller {
      */
     private parseResponse(response: Record<string, any>): number|undefined {
 
-        if (!response.ok) {
+        if (Object.hasOwnProperty.call(response, "ok") === false) {
             Log.error(response.description);
             return;
         }
 
-        if (!Array.isArray(response.result)) {
+        if (Object.hasOwnProperty.call(response, "result") === false || !Array.isArray(response.result)) {
             return;
         }
 

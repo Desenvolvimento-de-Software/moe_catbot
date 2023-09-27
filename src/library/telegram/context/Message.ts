@@ -250,7 +250,7 @@ export default class Message {
      * @return (number|undefined)
      */
     public getMessageThreadId(): number|undefined {
-        return this.messageThreadId;
+        return this.context.messageThreadId || undefined;
     }
 
     /**
