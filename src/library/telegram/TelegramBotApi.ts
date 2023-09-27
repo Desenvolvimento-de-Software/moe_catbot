@@ -182,9 +182,10 @@ export default class TelegramBotApi {
 
         const keys = Object.keys(payload);
         const result = <Record<string, any>> {};
+        const callback = (_: any, letter: string): string => letter.toUpperCase();
 
         for (const key of keys) {
-            const camelKey = key.toLowerCase().replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+            const camelKey = key.replace(/_([a-z])/g, callback);
             result[camelKey] = this.snakeToCamelCase(payload[key]);
         }
 

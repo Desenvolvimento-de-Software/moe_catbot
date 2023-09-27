@@ -20,6 +20,7 @@ import fetch from "node-fetch";
 import path from "path";
 import fs from "fs";
 import { Blob } from "buffer";
+import Log from "../helper/Log.js";
 
 export default class ProcessMedia extends Action {
 
@@ -60,7 +61,6 @@ export default class ProcessMedia extends Action {
     public async run(): Promise<void> {
 
         let fileId: string|undefined;
-
         const methods = [
             "getFileByPhoto",
             "getFileByVideo",
@@ -172,7 +172,23 @@ export default class ProcessMedia extends Action {
             return await this.context.message.reply(content);
         }
 
-        return await this.context.chat.sendMessage(content, { parseMode : "HTML" });
+        const options: Record<string, string|number> = { parseMode : "HTML" };
+        const reply = this.context.message.getMessageThreadId() || this.context.message.getReplyToMessage()?.getId();
+
+        if (reply) {
+            options.replyToMessageId = reply;
+        }
+
+        let response: Record<string, any> = {};
+
+        try {
+            response = await this.context.chat.sendMessage(content, options);
+
+        } catch (error: any) {
+            response = await this.context.chat.sendMessage(content, { parseMode : "HTML" });
+        }
+
+        return response;
     }
 
     /**

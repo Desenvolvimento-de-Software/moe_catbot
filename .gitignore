@@ -8,3 +8,4 @@ log/*
 tmp/*
 !tmp/.gitkeep
 node_modules
+bun.*
