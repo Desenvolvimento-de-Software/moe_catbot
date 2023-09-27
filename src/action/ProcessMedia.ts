@@ -173,7 +173,7 @@ export default class ProcessMedia extends Action {
         }
 
         const options: Record<string, string|number> = { parseMode : "HTML" };
-        const reply = this.context.message.getMessageThreadId() || this.context.message.getReplyToMessage()?.getId();
+        const reply = this.context.message.getReplyToMessage()?.getId() || this.context.message.getMessageThreadId();
 
         if (reply) {
             options.replyToMessageId = reply;
