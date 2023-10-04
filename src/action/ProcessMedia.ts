@@ -62,14 +62,22 @@ export default class ProcessMedia extends Action {
 
         let fileId: string|undefined;
         const methods = [
-            "getFileByPhoto",
-            "getFileByVideo",
-            "getFileByDocument"
+            this.getFileByPhoto,
+            this.getFileByVideo,
+            this.getFileByDocument
         ];
 
         while (!fileId?.length && methods.length) {
+
             const method = methods.shift();
-            fileId = await this[method as keyof ProcessMedia]() as string|undefined;
+
+            try {
+
+                fileId = method!.call(this);
+
+            } catch (err: any) {
+                Log.save(err.message, true, "error");
+            }
         }
 
         if (typeof fileId === "undefined" || !fileId.length) {
@@ -206,7 +214,6 @@ export default class ProcessMedia extends Action {
         const filename = path.basename(filepath);
         const buffer = fs.readFileSync(filepath);
         const blob = new Blob([buffer]);
-        // const file = await fileFromPath(filepath);
         const user = new CatboxUser();
 
         user
@@ -228,45 +235,6 @@ export default class ProcessMedia extends Action {
         }
 
         this.sendGroupMessage(response);
-
-        // if (response) {
-
-        //     const filesize = this.getParsedSize(file.size);
-
-        //     let message = "";
-
-        //     if (Number(payload.message.chat.id) > 0) {
-        //         message += `✅ <b>Uploaded Successfully!</b>\n\n`;
-        //         message += `☁️ Service: Catbox\n`;
-        //         message += `🗂️ Size: ${filesize}\n`;
-        //         message += `⏲️ Expires within: ∞\n`;
-        //         message += `📎 Link: <code>${response}</code>\n\n`;
-        //         message += `Tap or click on the link 👆 to copy it to your clipboard.\n\n`;
-        //         message += `⚡ Stay tuned at <a href="https://github.com/Desenvolvimento-de-Software/moe_catbot">GitHub</a>`;
-
-        //     } else {
-
-        //         const userId = payload.message.from.id;
-        //         const username = (payload.message.from.first_name || payload.message.from.username);
-
-        //         message += `${response}\n\n`;
-
-        //         if (payload.message.caption) {
-        //             message += `${payload.message.caption}\n\n`;
-        //         }
-
-        //         message += `👤 From <a href=\"tg://user?id=${userId}\">${username}</a>\n`;
-        //         message += `🤖 By @moe_catbot`;
-        //     }
-
-        //     editMessageText
-        //         .setChatId(payload.message.chat.id)
-        //         .setMessageId(this.messageId || 0)
-        //         .setText(message)
-        //         .setParseMode("HTML")
-        //         .setDisableWebPagePreview(Number(payload.message.chat.id) > 0)
-        //         .post();
-        // }
     }
 
     /**
